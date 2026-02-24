@@ -5,14 +5,17 @@
 //  Created by user on 23.02.2026.
 //
 
-internal import Combine
+import Combine
 import Foundation
 
 final class ActionManager {
     
+    private let encoder = JSONEncoder()
+    private let decoder = JSONDecoder()
+    
     @Published var actionHistory: Data {
         didSet {
-            UserDefaults.standard.set(actionHistory, forKey: "actionHistory")
+            UserDefaults.standard.set(actionHistory, forKey: Keys.actionHistory)
         }
     }
     
@@ -22,7 +25,7 @@ final class ActionManager {
     
     func getHistory() -> ActionHistory {
         do {
-            let actions = try JSONDecoder().decode(ActionHistory.self, from: actionHistory)
+            let actions = try decoder.decode(ActionHistory.self, from: actionHistory)
             print("current actions: \(actions)")
             return actions
         } catch {
@@ -36,7 +39,7 @@ final class ActionManager {
         do {
             var actionHistory = getHistory()
             actionHistory.actions.append(action)
-            let json = try JSONEncoder().encode(actionHistory)
+            let json = try encoder.encode(actionHistory)
             self.actionHistory = json
             print("Successfully created action!!!")
         } catch {
@@ -44,4 +47,8 @@ final class ActionManager {
         }
     }
     
+}
+
+private enum Keys {
+    static let actionHistory = "actionHistory"
 }

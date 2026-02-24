@@ -11,18 +11,15 @@ struct ActionHistory: Codable {
 }
 
 struct Action: Codable {
-    var date: String
+    var date: Date
     var action: String
         
     init(action: String) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
-        
-        self.date = dateFormatter.string(from: Date())
+        self.date = Date.now
         self.action = action
     }
     
-    init(date: String, action: String) {
+    init(date: Date, action: String) {
         self.date = date
         self.action = action
     }

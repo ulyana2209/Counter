@@ -7,68 +7,80 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     @IBOutlet weak var counterLabel: UILabel!
     @IBOutlet weak var minusButton: UIButton!
-    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var incrementButton: UIButton!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var historyLabel: UILabel!
     @IBOutlet weak var toCounter: UIButton!
-    let dateFormatter = DateFormatter()
     
     let actionManager = ActionManager()
+    var counter: Int = 0
+    
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy HH:mm"
+        return formatter
+    }()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        counterLabel.text = "Значение счётчика: \(counter)"
-        textView.isHidden = false
-        resetButton.isHidden = true
-        dateFormatter.dateFormat = "dd.MM.yyyy HH:mm"
-        let history = ActionManager().getHistory()
-        for act in history.actions {
-            textView.text = textView.text + "\n\(act.date) - \(act.action)\n"
-        }
-        
-        textView.textAlignment = .left
-        
+        updateCounterLabel()
+        loadHistory()
     }
-
     
-    var counter: Int = 0
+   private func configureUI() {
+       textView.textAlignment = .left
+       counterLabel.text = "Значение счётчика: \(counter)"
+       textView.isHidden = false
+       resetButton.isHidden = true
+    }
     
-    @IBAction func buttonDidTab(_ sender: Any) {
+    private func loadHistory() {
+        let history = actionManager.getHistory()
+        var text = ""
+        for action in history.actions {
+            let formattedDate = Self.dateFormatter.string(from: action.date)
+            text += "\(formattedDate) - \(action.action)\n"
+        }
+        textView.text = text
+    }
+    private func updateCounterLabel() {
+        counterLabel.text = "Значение счётчика: \(counter)"
+    }
+    
+    @IBAction func incrementTabbed(_ sender: Any) {
         counter += 1
-        counterLabel.text = "Значение счётчика: \(counter)"
-        let actionType = ActionType.increase
-        actionManager.createHistory(actionType: actionType)
-        
+        updateCounterLabel()
+        actionManager.createHistory(actionType: .increase)
     }
+    
     @IBAction func minusButtonDidTab(_ sender: Any) {
-        if counter > 0 {
-            counter -= 1
-            counterLabel.text = "Значение счётчика: \(counter)"
-            let actionType = ActionType.decrease
-            actionManager.createHistory(actionType: actionType)
-        } else {
-            let actionType = ActionType.negativeValue
-            actionManager.createHistory(actionType: actionType)
+        guard counter > 0 else {
+            actionManager.createHistory(actionType: .negativeValue)
+            return
         }
+        counter -= 1
+        actionManager.createHistory(actionType: .decrease)
+        updateCounterLabel()
     }
+    
     @IBAction func resetButtonDidTab(_ sender: Any) {
         counter = 0
-        counterLabel.text = "Значение счётчика: \(counter)"
-        let actionType = ActionType.reset
-        actionManager.createHistory(actionType: actionType)
-
+        updateCounterLabel()
+        actionManager.createHistory(actionType: .reset)
     }
+    
     @IBAction func toCounter(_ sender: UITapGestureRecognizer) {
         textView.isHidden = true
         resetButton.isHidden = false
         historyLabel.isHidden = true
         toCounter.isHidden = true
-       
     }
 }
+
 

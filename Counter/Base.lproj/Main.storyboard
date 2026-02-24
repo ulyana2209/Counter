@@ -56,7 +56,7 @@
                                     <color key="baseForegroundColor" red="1" green="0.0" blue="0.01666666667" alpha="1" colorSpace="calibratedRGB"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <action selector="buttonDidTab:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6eO-aR-RK8"/>
+                                    <action selector="incrementTabbed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="DHQ-dy-8PP"/>
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ffm-uH-stQ">
@@ -92,9 +92,9 @@ Cgo
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
-                        <outlet property="button" destination="Feu-ld-1US" id="auz-Wn-P7U"/>
                         <outlet property="counterLabel" destination="0Em-NJ-fna" id="S4s-A1-fEJ"/>
                         <outlet property="historyLabel" destination="Vnw-fH-ovm" id="Pxn-Vo-NEW"/>
+                        <outlet property="incrementButton" destination="Feu-ld-1US" id="7bc-KO-3Zo"/>
                         <outlet property="minusButton" destination="TeO-JB-rMp" id="IAw-TC-RD0"/>
                         <outlet property="resetButton" destination="1zy-6x-kLF" id="35n-Hb-zKO"/>
                         <outlet property="textView" destination="Ffm-uH-stQ" id="PlC-12-zhX"/>
